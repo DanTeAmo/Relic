@@ -764,13 +764,21 @@ const SITES = [
     dataSources:[{label:'UCA research · employment figures',url:'https://repositorio.uca.edu.ar/bitstream/123456789/19258/4/caso-fordlandia-historia.pdf'}],
     en:{ name:'Fordlandia', country:'Brazil', statusLabel:'Inhabited Remnant', peakLabel:'early 1930s',
       hook:'Henry Ford’s attempt to build an American rubber-plantation town deep in the Amazon, undone by the jungle it ignored.',
+<<<<<<< HEAD
       history:[ 'In 1928 Ford Motor Company leased land along Brazil’s Tapajós River to grow its own rubber, building a town of water towers, a hospital and Michigan-style clapboard houses for houses. Employment reached about 3,100 in 1931, alongside with American cinema nights and mandatory square dancing.',
+=======
+      history:[ 'In 1928 Ford Motor Company leased land along Brazil’s Tapajós River to grow its own rubber, building a town of water towers, a hospital and Michigan-style clapboard houses. Employment reached about 3,100 in 1931, alongside American cinema nights and mandatory square dancing.',
+>>>>>>> 0bb0636 (fix: separate population, attendance, and workforce figures)
         'The plantation, however, was laid out in close rows unsuited to the Amazon, which invited leaf blight the US managers hadn’t planned for, and labor unrest repeatedly flared against the imposed American lifestyle. Ford sold the failed venture at a loss in 1945, having never shipped significant rubber back to Detroit.' ],
       fieldNote:'A handful of residents live among the water towers and old houses today — this is less a ruin than a town that simply outlived the company that built it.',
       timeline:[ {y:1928,e:'Ford Motor Company leases the land'}, {y:1930,e:'Workers riot over imposed American customs'}, {y:1933,e:'Leaf blight devastates the rubber trees'}, {y:1945,e:'Ford sells the plantation at a loss'} ] },
     ru:{ name:'Фордландия', country:'Бразилия', statusLabel:'Населённый остаток', peakLabel:'в начале 1930-х',
       hook:'Попытка Генри Форда построить американский городок каучуковой плантации в глубине Амазонии, провалившаяся из-за джунглей, которые он не учёл.',
+<<<<<<< HEAD
       history:[ 'В 1928 году Ford Motor Company арендовала землю вдоль бразильской реки Тапажос для выращивания собственного каучука, построив город с водонапорными башнями, больницей и дощатыми домами в мичиганском стиле В 1931 году занятость достигла примерно 3 100 человек; для работников устраивали американские киносеансами и обязательными танцами.',
+=======
+      history:[ 'В 1928 году Ford Motor Company арендовала землю вдоль бразильской реки Тапажос для выращивания собственного каучука и построила город с водонапорными башнями, больницей и дощатыми домами в мичиганском стиле. В 1931 году занятость достигла примерно 3 100 человек; для работников устраивали американские киносеансы и обязательные танцы.',
+>>>>>>> 0bb0636 (fix: separate population, attendance, and workforce figures)
         'Однако плантацию заложили плотными рядами, не подходящими для Амазонии, что спровоцировало вспышку листовой гнили, к которой американские управляющие не были готовы, а трудовые волнения не раз вспыхивали против навязанного американского уклада. В 1945 году Форд продал неудачное предприятие в убыток, так и не отправив в Детройт сколько-нибудь значимого количества каучука.' ],
       fieldNote:'Сегодня среди водонапорных башен и старых домов живёт горстка людей — это скорее город, переживший создавшую его компанию, чем руина.',
       timeline:[ {y:1928,e:'Ford Motor Company арендует землю'}, {y:1930,e:'Бунт рабочих против навязанных американских порядков'}, {y:1933,e:'Листовая гниль уничтожает каучуковые деревья'}, {y:1945,e:'Форд продаёт плантацию в убыток'} ] }
@@ -1202,6 +1210,7 @@ function projectEq(lat, lng, w, h){
   const x = (lng + 180) / 360 * w;
   const y = (90 - lat) / 180 * h;
   return [x, y];
+        ${site.dataSources?.length ? `<div class="data-sources"><span>${esc(t('sourcesLabel'))}</span>${site.dataSources.map(source => `<a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.label)}</a>`).join('')}</div>` : ''}
 }
 /* Simplified world coastlines (land-110m, Natural Earth via world-atlas,
    ISC-licensed), pre-projected offline to match projectEq(lat,lng,1000,500)
