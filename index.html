@@ -245,6 +245,9 @@
   .stat-grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(130px,1fr)); gap: 18px var(--gap); padding: 14px 0 22px; border-top: 1px solid var(--label); margin-bottom: clamp(36px,6vw,80px); }
   .stat-grid div span{ display:block; font-size: var(--size-small); color: var(--label-2); margin-bottom: 6px; }
   .stat-grid div b{ font-size: clamp(20px,2vw,28px); font-weight:400; letter-spacing:-0.04em; font-variant-numeric: tabular-nums; }
+  .data-sources{ display:flex; flex-direction:column; gap:6px; margin-top:18px; font-size:var(--size-small); }
+  .data-sources a{ text-decoration:underline; text-decoration-color:var(--sep-strong); text-underline-offset:3px; }
+  .data-sources a:hover{ text-decoration-color:var(--label); }
   .site-body{ display:grid; grid-template-columns: 1.4fr 1fr; gap: clamp(32px,6vw,96px); }
   .site-body h2{ font-size: var(--size-small); color: var(--label-2); margin-bottom: 14px; letter-spacing:-0.02em; line-height:1; }
   .site-body section{ margin-bottom: 44px; font-size: clamp(17px,1.5vw,22px); line-height:1.08; }
@@ -483,7 +486,7 @@ const STR = {
     searchPh: 'Поиск по названию, стране…', all: 'Все',
     sortLabel: 'Сортировка:', sortName: 'По названию', sortAbandoned: 'По году ухода', sortDormant: 'По годам забвения',
     noResults: 'Ничего не найдено по заданным условиям.',
-    founded: 'ОСНОВАНО', abandonedLbl: 'ОСТАВЛЕНО', peakLbl: 'ПИК НАСЕЛЕНИЯ', annualVisitors: 'ПОСЕТИТЕЛЕЙ В ГОД', dormantLbl: 'ЛЕТ В ЗАБВЕНИИ', statusLbl: 'СТАТУС', surveyedLbl: 'ПОСЛЕДНИЙ ОБЗОР',
+    founded: 'ОСНОВАНО', abandonedLbl: 'ОСТАВЛЕНО', peakLbl: 'ПИК НАСЕЛЕНИЯ', annualVisitors: 'ПОСЕТИТЕЛЕЙ В ГОД', seasonalVisitors: 'ПОСЕТИТЕЛЕЙ ЗА СЕЗОН', workforcePeak: 'РАБОТНИКОВ НА ПИКЕ', dormantLbl: 'ЛЕТ В ЗАБВЕНИИ', statusLbl: 'СТАТУС', surveyedLbl: 'ПОСЛЕДНИЙ ОБЗОР', sourcesLabel: 'ИСТОЧНИКИ ДАННЫХ',
     historyHead: 'История', timelineHead: 'Хронология', fieldNoteHead: 'Полевая заметка', dataHead: 'Координаты и данные',
     coordLbl: 'Координаты', continentLbl: 'Континент', categoryLbl: 'Тип',
     statusDisclaimer: 'Статус на момент последнего обзора. Условия на месте могли измениться — архив не является источником актуальных новостей.',
@@ -524,7 +527,7 @@ const STR = {
     searchPh: 'Search by name, country…', all: 'All',
     sortLabel: 'Sort:', sortName: 'Name', sortAbandoned: 'Year abandoned', sortDormant: 'Years dormant',
     noResults: 'No sites match these filters.',
-    founded: 'FOUNDED', abandonedLbl: 'ABANDONED', peakLbl: 'PEAK POPULATION', annualVisitors: 'ANNUAL VISITORS', dormantLbl: 'YEARS DORMANT', statusLbl: 'STATUS', surveyedLbl: 'LAST SURVEYED',
+    founded: 'FOUNDED', abandonedLbl: 'ABANDONED', peakLbl: 'PEAK POPULATION', annualVisitors: 'VISITORS PER YEAR', seasonalVisitors: 'VISITORS PER SEASON', workforcePeak: 'PEAK WORKFORCE', dormantLbl: 'YEARS DORMANT', statusLbl: 'STATUS', surveyedLbl: 'LAST SURVEYED', sourcesLabel: 'DATA SOURCES',
     historyHead: 'History', timelineHead: 'Timeline', fieldNoteHead: 'Field note', dataHead: 'Coordinates & data',
     coordLbl: 'Coordinates', continentLbl: 'Continent', categoryLbl: 'Category',
     statusDisclaimer: 'Status as of the last survey. Conditions on the ground may have changed — this archive is not a live news source.',
@@ -589,7 +592,7 @@ function setLang(l){
 const SITES = [
   {
     id:'pripyat', continent:'europe', category:'settlement', statusKey:'exclusion',
-    lat:51.4062, lng:30.0566, founded:1970, abandoned:1986, abandonedDate:'1986-04-27', peak:49360, surveyed:2024,
+    lat:51.4062, lng:30.0566, founded:1970, abandoned:1986, abandonedDate:'1986-04-27', populationPeak:49360, surveyed:2024,
     en:{ name:'Pripyat', country:'Ukraine', statusLabel:'Exclusion Zone', peakLabel:'at evacuation, 1986',
       hook:'A model Soviet city evacuated in 36 hours and never resettled.',
       history:[
@@ -609,7 +612,7 @@ const SITES = [
   },
   {
     id:'hashima', continent:'asia', category:'island', statusKey:'reclaimed',
-    lat:32.6274, lng:129.7383, founded:1887, abandoned:1974, abandonedDate:'1974-01-15', peak:5259, surveyed:2023,
+    lat:32.6274, lng:129.7383, founded:1887, abandoned:1974, abandonedDate:'1974-01-15', populationPeak:5259, surveyed:2023,
     en:{ name:'Hashima Island', country:'Japan', statusLabel:'Reclaimed', peakLabel:'in 1959',
       hook:'A seabed coal mine so dense with concrete tenements it was nicknamed Battleship Island.',
       history:[
@@ -629,7 +632,7 @@ const SITES = [
   },
   {
     id:'kolmanskop', continent:'africa', category:'settlement', statusKey:'museum',
-    lat:-26.6667, lng:15.2333, founded:1908, abandoned:1954, abandonedDate:'1954-01-01', peak:1200, surveyed:2023,
+    lat:-26.6667, lng:15.2333, founded:1908, abandoned:1954, abandonedDate:'1954-01-01', populationPeak:1200, surveyed:2023,
     en:{ name:'Kolmanskop', country:'Namibia', statusLabel:'Preserved', peakLabel:'mid-1910s',
       hook:'A diamond-rush boomtown in the Namib Desert, now half-buried in sand by design of the wind alone.',
       history:[ 'A railway worker found a diamond in the sand here in 1908, and within two years a full German colonial town had risen in the Namib — a casino, a hospital with Africa’s first X-ray machine, a ballroom, ice imported for drinks.',
@@ -645,7 +648,7 @@ const SITES = [
   },
   {
     id:'bodie', continent:'namerica', category:'settlement', statusKey:'museum',
-    lat:38.2097, lng:-119.0103, founded:1876, abandoned:1942, abandonedDate:'1942-01-01', peak:10000, surveyed:2023,
+    lat:38.2097, lng:-119.0103, founded:1876, abandoned:1942, abandonedDate:'1942-01-01', populationPeak:10000, surveyed:2023,
     en:{ name:'Bodie', country:'United States', statusLabel:'Arrested Decay', peakLabel:'in 1880',
       hook:'A California gold-rush town frozen mid-collapse by official policy, not accident.',
       history:[ 'A 1876 gold strike turned a wind-scoured Sierra Nevada camp into a town of some ten thousand by 1880, with sixty-five saloons on Main Street and a reputation, per one diary, as a place where ‘the shooting man was more frequent than the Christian man.’',
@@ -661,7 +664,7 @@ const SITES = [
   },
   {
     id:'craco', continent:'europe', category:'settlement', statusKey:'unstable',
-    lat:40.3804, lng:16.4378, founded:1060, abandoned:1963, abandonedDate:'1963-01-01', peak:2590, surveyed:2023,
+    lat:40.3804, lng:16.4378, founded:1060, abandoned:1963, abandonedDate:'1963-01-01', populationPeak:2590, surveyed:2023,
     en:{ name:'Craco', country:'Italy', statusLabel:'Structurally Unstable', peakLabel:'in 1561',
       hook:'A thousand-year-old hill town in Basilicata, evacuated piece by piece as its own hill gave way.',
       history:[ 'First documented in 1060 on a 400-meter outcrop in southern Italy, Craco survived plague, famine and emigration that had already cut its population from a 1561 peak of roughly 2,590 down to under two thousand by the twentieth century.',
@@ -677,7 +680,7 @@ const SITES = [
   },
   {
     id:'humberstone', continent:'samerica', category:'industrial', statusKey:'unesco',
-    lat:-20.2167, lng:-69.8000, founded:1872, abandoned:1960, abandonedDate:'1960-01-01', peak:3700, surveyed:2023,
+    lat:-20.2167, lng:-69.8000, founded:1872, abandoned:1960, abandonedDate:'1960-01-01', populationPeak:3700, surveyed:2023,
     en:{ name:'Humberstone', country:'Chile', statusLabel:'UNESCO Site', peakLabel:'in the 1940s',
       hook:'A saltpeter refining town in the Atacama Desert, left standing when synthetic nitrate ended its reason to exist.',
       history:[ 'Founded in 1872 as a nitrate works in one of the driest places on Earth, Humberstone refined caliche into saltpeter for fertilizer and explosives, drawing a company-town population of roughly 3,700 at its 1940s peak, complete with a theater, swimming pool and market.',
@@ -693,7 +696,7 @@ const SITES = [
   },
   {
     id:'kayakoy', continent:'asia', category:'settlement', statusKey:'protected',
-    lat:36.6334, lng:29.0531, founded:1700, abandoned:1923, abandonedDate:'1923-01-01', peak:6500, surveyed:2023,
+    lat:36.6334, lng:29.0531, founded:1700, abandoned:1923, abandonedDate:'1923-01-01', populationPeak:6500, surveyed:2023,
     en:{ name:'Kayaköy', country:'Türkiye', statusLabel:'Protected Ruin', peakLabel:'before 1923',
       hook:'A Greek Orthodox hillside village in Anatolia, emptied overnight by a treaty, not a disaster.',
       history:[ 'Known as Livissi, this hillside village near Fethiye had been home to a Greek Orthodox community for generations, numbering several thousand by the early twentieth century, with two churches still standing above the terraced houses.',
@@ -709,7 +712,7 @@ const SITES = [
   },
   {
     id:'northbrother', continent:'namerica', category:'island', statusKey:'sanctuary',
-    lat:40.8007, lng:-73.8990, founded:1885, abandoned:1963, abandonedDate:'1963-01-01', peak:2000, surveyed:2022,
+    lat:40.8007, lng:-73.8990, founded:1885, abandoned:1963, abandonedDate:'1963-01-01', populationPeak:2000, surveyed:2022,
     en:{ name:'North Brother Island', country:'United States', statusLabel:'Wildlife Sanctuary, Off-Limits', peakLabel:'early 1900s',
       hook:'A quarantine island in New York’s East River, best known for the patient it couldn’t release.',
       history:[ 'Riverside Hospital opened here in 1885 to isolate patients with smallpox, typhoid and other contagious disease, and later held ‘Typhoid Mary’ Mallon for roughly three decades. In 1904 the steamship General Slocum burned just offshore, and the hospital’s staff treated most of the over 1,000 dead.',
@@ -725,7 +728,7 @@ const SITES = [
   },
   {
     id:'centralia', continent:'namerica', category:'settlement', statusKey:'burning',
-    lat:40.8050, lng:-76.3419, founded:1866, abandoned:1992, abandonedDate:'1992-01-01', peak:2761, surveyed:2024,
+    lat:40.8050, lng:-76.3419, founded:1866, abandoned:1992, abandonedDate:'1992-01-01', populationPeak:2761, surveyed:2024,
     en:{ name:'Centralia', country:'United States', statusLabel:'Burning', peakLabel:'in 1890',
       hook:'A Pennsylvania coal town being slowly consumed from underneath by a fire that started in 1962 and has never been put out.',
       history:[ 'Centralia was a modest coal-mining borough of under 3,000 at its 1890 peak until a 1962 trash-fire, by most accounts, ignited an exposed coal seam beneath the town. The underground fire spread through the abandoned mine network and proved impossible to extinguish.',
@@ -741,7 +744,7 @@ const SITES = [
   },
   {
     id:'varosha', continent:'europe', category:'leisure', statusKey:'reopened',
-    lat:35.1136, lng:33.9550, founded:1970, abandoned:1974, abandonedDate:'1974-08-14', peak:39000, surveyed:2024,
+    lat:35.1136, lng:33.9550, founded:1970, abandoned:1974, abandonedDate:'1974-08-14', populationPeak:39000, surveyed:2024,
     en:{ name:'Varosha', country:'Cyprus', statusLabel:'Partially Reopened', peakLabel:'summer 1974',
       hook:'The Cypriot resort of Famagusta, fenced off mid-season by an invasion and left to the 1970s ever since.',
       history:[ 'By the early 1970s Varosha was the most fashionable resort quarter of Famagusta, drawing figures like Elizabeth Taylor and Brigitte Bardot to its high-rise beachfront hotels, with tourist numbers in the tens of thousands at the height of summer season.',
@@ -757,23 +760,25 @@ const SITES = [
   },
   {
     id:'fordlandia', continent:'samerica', category:'industrial', statusKey:'inhabited',
-    lat:-3.7975, lng:-55.4904, founded:1928, abandoned:1945, abandonedDate:'1945-01-01', peak:10000, surveyed:2023,
+    lat:-3.7975, lng:-55.4904, founded:1928, abandoned:1945, abandonedDate:'1945-01-01', workforcePeak:3100, surveyed:2023,
+    dataSources:[{label:'UCA research · employment figures',url:'https://repositorio.uca.edu.ar/bitstream/123456789/19258/4/caso-fordlandia-historia.pdf'}],
     en:{ name:'Fordlandia', country:'Brazil', statusLabel:'Inhabited Remnant', peakLabel:'early 1930s',
       hook:'Henry Ford’s attempt to build an American rubber-plantation town deep in the Amazon, undone by the jungle it ignored.',
-      history:[ 'In 1928 Ford Motor Company leased land along Brazil’s Tapajós River to grow its own rubber, building a town of water towers, a hospital and Michigan-style clapboard houses for a workforce that briefly reached around 10,000, complete with American cinema nights and mandatory square dancing.',
+      history:[ 'In 1928 Ford Motor Company leased land along Brazil’s Tapajós River to grow its own rubber, building a town of water towers, a hospital and Michigan-style clapboard houses for houses. Employment reached about 3,100 in 1931, alongside with American cinema nights and mandatory square dancing.',
         'The plantation, however, was laid out in close rows unsuited to the Amazon, which invited leaf blight the US managers hadn’t planned for, and labor unrest repeatedly flared against the imposed American lifestyle. Ford sold the failed venture at a loss in 1945, having never shipped significant rubber back to Detroit.' ],
       fieldNote:'A handful of residents live among the water towers and old houses today — this is less a ruin than a town that simply outlived the company that built it.',
       timeline:[ {y:1928,e:'Ford Motor Company leases the land'}, {y:1930,e:'Workers riot over imposed American customs'}, {y:1933,e:'Leaf blight devastates the rubber trees'}, {y:1945,e:'Ford sells the plantation at a loss'} ] },
     ru:{ name:'Фордландия', country:'Бразилия', statusLabel:'Населённый остаток', peakLabel:'в начале 1930-х',
       hook:'Попытка Генри Форда построить американский городок каучуковой плантации в глубине Амазонии, провалившаяся из-за джунглей, которые он не учёл.',
-      history:[ 'В 1928 году Ford Motor Company арендовала землю вдоль бразильской реки Тапажос для выращивания собственного каучука, построив город с водонапорными башнями, больницей и дощатыми домами в мичиганском стиле для рабочей силы, ненадолго достигшей около 10 000 человек, с американскими киносеансами и обязательными танцами.',
+      history:[ 'В 1928 году Ford Motor Company арендовала землю вдоль бразильской реки Тапажос для выращивания собственного каучука, построив город с водонапорными башнями, больницей и дощатыми домами в мичиганском стиле В 1931 году занятость достигла примерно 3 100 человек; для работников устраивали американские киносеансами и обязательными танцами.',
         'Однако плантацию заложили плотными рядами, не подходящими для Амазонии, что спровоцировало вспышку листовой гнили, к которой американские управляющие не были готовы, а трудовые волнения не раз вспыхивали против навязанного американского уклада. В 1945 году Форд продал неудачное предприятие в убыток, так и не отправив в Детройт сколько-нибудь значимого количества каучука.' ],
       fieldNote:'Сегодня среди водонапорных башен и старых домов живёт горстка людей — это скорее город, переживший создавшую его компанию, чем руина.',
       timeline:[ {y:1928,e:'Ford Motor Company арендует землю'}, {y:1930,e:'Бунт рабочих против навязанных американских порядков'}, {y:1933,e:'Листовая гниль уничтожает каучуковые деревья'}, {y:1945,e:'Форд продаёт плантацию в убыток'} ] }
   },
   {
     id:'spreepark', continent:'europe', category:'leisure', statusKey:'redevelop',
-    lat:52.4869, lng:13.4897, founded:1969, abandoned:2002, abandonedDate:'2002-01-01', peak:1700000, peakMetric:'annualVisitors', surveyed:2024,
+    lat:52.4869, lng:13.4897, founded:1969, abandoned:2002, abandonedDate:'2002-01-01', annualVisitors:1700000, surveyed:2024,
+    dataSources:[{label:'Freie Universität Berlin · Kulturpark Plänterwald',url:'https://www.oei.fu-berlin.de/kultur/studium_lehre/lehrprojekte/abgeschlossene_projekte/industriekultur/spreepark_plaenterwald/index.html'}],
     en:{ name:'Spreepark', country:'Germany', statusLabel:'Under Redevelopment', peakLabel:'annual visitors, 1980s',
       hook:'An East Berlin amusement park whose owner fled the country after being caught smuggling cocaine in its rides.',
       history:[ 'Opened in 1969 as Kulturpark Plänterwald, East Berlin’s only permanent amusement park drew up to 1.7 million visitors a year under state ownership before being privatized after reunification and rebranded Spreepark in 1991.',
@@ -789,7 +794,8 @@ const SITES = [
   },
   {
     id:'epecuen', continent:'samerica', category:'leisure', statusKey:'flood',
-    lat:-37.0667, lng:-62.9333, founded:1921, abandoned:1985, abandonedDate:'1985-11-10', peak:5000, surveyed:2023,
+    lat:-37.0667, lng:-62.9333, founded:1921, abandoned:1985, abandonedDate:'1985-11-10', populationPeak:1500, seasonalVisitors:25000, surveyed:2023,
+    dataSources:[{label:'CONAE · population and tourism figures',url:'https://www.argentina.gob.ar/ciencia/conae/educacion-y-formacion-masiva/materiales-educativos/villa-epecuen-buenos-aires-landsat-5-y-8'}],
     en:{ name:'Villa Epecuén', country:'Argentina', statusLabel:'Flood & Resurface', peakLabel:'summer season, 1970s',
       hook:'An Argentine lake resort drowned under ten meters of salt water for a quarter century, then re-emerged as a skeleton.',
       history:[ 'Built from 1921 around the shores of a saline lake prized for therapeutic waters, Villa Epecuén grew into a resort town of roughly 1,500 year-round residents and tens of thousands of summer visitors, second only to Mar del Plata among Argentine beach destinations.',
@@ -805,7 +811,7 @@ const SITES = [
   },
   {
     id:'wittenoom', continent:'oceania', category:'settlement', statusKey:'erased',
-    lat:-22.2425, lng:118.3350, founded:1946, abandoned:2007, abandonedDate:'2007-01-01', peak:1500, surveyed:2024,
+    lat:-22.2425, lng:118.3350, founded:1946, abandoned:2007, abandonedDate:'2007-01-01', populationPeak:1500, surveyed:2024,
     en:{ name:'Wittenoom', country:'Australia', statusLabel:'Officially Erased', peakLabel:'in the 1950s',
       hook:'An Australian mining town the government stripped from its own maps because the asbestos that built it was killing everyone who stayed.',
       history:[ 'Founded in 1946 around a blue asbestos mine in the Pilbara, Wittenoom grew to around 1,500 residents at its peak and was, for a time, the Pilbara’s largest town, with the mine supplying a substantial share of the world’s crocidolite asbestos.',
@@ -1147,7 +1153,7 @@ function viewSite(id){
   <div class="stat-grid">
     <div><span>${esc(t('founded'))}</span><b>${site.founded}</b></div>
     <div><span>${esc(t('abandonedLbl'))}</span><b>${site.abandoned}</b></div>
-    <div><span>${esc(t(site.peakMetric || 'peakLbl'))}</span><b>${fmtInt(site.peak)}</b></div>
+    ${[['peakLbl',site.populationPeak],['annualVisitors',site.annualVisitors],['seasonalVisitors',site.seasonalVisitors],['workforcePeak',site.workforcePeak]].filter(([,value]) => Number.isFinite(value)).map(([key,value]) => `<div><span>${esc(t(key))}</span><b>${fmtInt(value)}</b></div>`).join('')}
     <div><span>${esc(t('dormantLbl'))}</span><b>${fmtInt(dormant)}</b></div>
     <div><span>${esc(t('surveyedLbl'))}</span><b>${site.surveyed}</b></div>
   </div>
@@ -1176,6 +1182,7 @@ function viewSite(id){
           <div><span>${esc(t('yearsActive'))}</span><span>${active}</span></div>
         </div>
         <p class="disclaimer">${esc(t('statusDisclaimer'))}</p>
+        ${site.dataSources?.length ? `<div class="data-sources"><span>${esc(t('sourcesLabel'))}</span>${site.dataSources.map(source => `<a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.label)}</a>`).join('')}</div>` : ''}
       </section>
     </div>
   </div>
