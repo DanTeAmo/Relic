@@ -483,7 +483,7 @@ const STR = {
     searchPh: 'Поиск по названию, стране…', all: 'Все',
     sortLabel: 'Сортировка:', sortName: 'По названию', sortAbandoned: 'По году ухода', sortDormant: 'По годам забвения',
     noResults: 'Ничего не найдено по заданным условиям.',
-    founded: 'ОСНОВАНО', abandonedLbl: 'ОСТАВЛЕНО', peakLbl: 'ПИК НАСЕЛЕНИЯ', dormantLbl: 'ЛЕТ В ЗАБВЕНИИ', statusLbl: 'СТАТУС', surveyedLbl: 'ПОСЛЕДНИЙ ОБЗОР',
+    founded: 'ОСНОВАНО', abandonedLbl: 'ОСТАВЛЕНО', peakLbl: 'ПИК НАСЕЛЕНИЯ', annualVisitors: 'ПОСЕТИТЕЛЕЙ В ГОД', dormantLbl: 'ЛЕТ В ЗАБВЕНИИ', statusLbl: 'СТАТУС', surveyedLbl: 'ПОСЛЕДНИЙ ОБЗОР',
     historyHead: 'История', timelineHead: 'Хронология', fieldNoteHead: 'Полевая заметка', dataHead: 'Координаты и данные',
     coordLbl: 'Координаты', continentLbl: 'Континент', categoryLbl: 'Тип',
     statusDisclaimer: 'Статус на момент последнего обзора. Условия на месте могли измениться — архив не является источником актуальных новостей.',
@@ -524,7 +524,7 @@ const STR = {
     searchPh: 'Search by name, country…', all: 'All',
     sortLabel: 'Sort:', sortName: 'Name', sortAbandoned: 'Year abandoned', sortDormant: 'Years dormant',
     noResults: 'No sites match these filters.',
-    founded: 'FOUNDED', abandonedLbl: 'ABANDONED', peakLbl: 'PEAK POPULATION', dormantLbl: 'YEARS DORMANT', statusLbl: 'STATUS', surveyedLbl: 'LAST SURVEYED',
+    founded: 'FOUNDED', abandonedLbl: 'ABANDONED', peakLbl: 'PEAK POPULATION', annualVisitors: 'ANNUAL VISITORS', dormantLbl: 'YEARS DORMANT', statusLbl: 'STATUS', surveyedLbl: 'LAST SURVEYED',
     historyHead: 'History', timelineHead: 'Timeline', fieldNoteHead: 'Field note', dataHead: 'Coordinates & data',
     coordLbl: 'Coordinates', continentLbl: 'Continent', categoryLbl: 'Category',
     statusDisclaimer: 'Status as of the last survey. Conditions on the ground may have changed — this archive is not a live news source.',
@@ -773,7 +773,7 @@ const SITES = [
   },
   {
     id:'spreepark', continent:'europe', category:'leisure', statusKey:'redevelop',
-    lat:52.4869, lng:13.4897, founded:1969, abandoned:2002, abandonedDate:'2002-01-01', peak:1700000, surveyed:2024,
+    lat:52.4869, lng:13.4897, founded:1969, abandoned:2002, abandonedDate:'2002-01-01', peak:1700000, peakMetric:'annualVisitors', surveyed:2024,
     en:{ name:'Spreepark', country:'Germany', statusLabel:'Under Redevelopment', peakLabel:'annual visitors, 1980s',
       hook:'An East Berlin amusement park whose owner fled the country after being caught smuggling cocaine in its rides.',
       history:[ 'Opened in 1969 as Kulturpark Plänterwald, East Berlin’s only permanent amusement park drew up to 1.7 million visitors a year under state ownership before being privatized after reunification and rebranded Spreepark in 1991.',
@@ -1147,7 +1147,7 @@ function viewSite(id){
   <div class="stat-grid">
     <div><span>${esc(t('founded'))}</span><b>${site.founded}</b></div>
     <div><span>${esc(t('abandonedLbl'))}</span><b>${site.abandoned}</b></div>
-    <div><span>${esc(t('peakLbl'))}</span><b>${fmtInt(site.peak)}</b></div>
+    <div><span>${esc(t(site.peakMetric || 'peakLbl'))}</span><b>${fmtInt(site.peak)}</b></div>
     <div><span>${esc(t('dormantLbl'))}</span><b>${fmtInt(dormant)}</b></div>
     <div><span>${esc(t('surveyedLbl'))}</span><b>${site.surveyed}</b></div>
   </div>
