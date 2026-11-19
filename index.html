@@ -82,8 +82,8 @@
     filter: blur(16px) var(--photo-tone); user-select:none; -webkit-user-drag:none;
     transition: opacity 1s ease, transform 1.4s var(--ease), filter 1.2s var(--ease); }
   img.ph.instant{ transition:none !important; }
-  img.ph.loaded{ opacity:1; transform:none; filter: var(--photo-tone); }
-  @media (hover:hover){ a.card:hover img.ph.loaded{ transform: scale(1.04); transition-duration: 1.1s, 1.1s, 1.1s; } }
+  img.ph.loaded{ opacity:1; transform: translate3d(0, var(--py, 0px), 0) scale(var(--ps, 1)); filter: var(--photo-tone); }
+  @media (hover:hover){ a.card:hover img.ph.loaded{ transform: translate3d(0, var(--py, 0px), 0) scale(calc(var(--ps, 1) * 1.04)); transition-duration: 1.1s, 1.1s, 1.1s; } }
 
   /* ---------- shell ---------- */
   #shell{ position: relative; min-height: 100vh; display: flex; flex-direction: column; }
@@ -433,6 +433,20 @@
   @media (max-width: 900px){ .causes{ grid-template-columns: repeat(2, 1fr); row-gap: 28px; } }
   @media (max-width: 480px){ .causes{ grid-template-columns: 1fr; } }
   a.chip:hover{ background: var(--sep-strong); }
+  /* ---------- motion ---------- */
+  .split .sl{ display:block; overflow:hidden; padding-bottom:.08em; margin-bottom:-.08em; }
+  .split .sl > span{ display:inline-block; transform: translateY(108%); transition: transform 1.15s var(--ease); }
+  .split.in .sl > span{ transform:none; }
+  .card .thumb, .d-gallery .fr, .site-banner, .hg-item{ --ps: 1.1; }
+  .card .thumb, .d-gallery .fr{ clip-path: inset(100% 0 0 0); transition: clip-path 1.3s var(--ease); }
+  .card.in .thumb, .d-gallery figure.in .fr{ clip-path: inset(0 0 0 0); }
+  .timeline-list li[data-reveal]{ transform: translateY(12px); }
+  .access .access-status i{ transition: transform .6s var(--ease); }
+  .access.in .access-status i, .access .access-status i{ animation: dotIn .9s var(--ease) both .3s; }
+  @keyframes dotIn{ from{ transform: scale(0); } to{ transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce){ .split .sl > span{ transform:none !important; } .card .thumb, .d-gallery .fr{ clip-path:none !important; } }
+  :root[data-motion="off"] .split .sl > span{ transform:none !important; }
+  :root[data-motion="off"] .card .thumb, :root[data-motion="off"] .d-gallery .fr{ clip-path:none !important; }
 </style>
 
 <a class="skip" href="#app" id="skipLink">Skip to content</a>
@@ -1050,7 +1064,7 @@ function viewAtlas(){
       <p class="note">${esc(tr('Каждое дело в архиве отнесено к одной главной причине ухода. Нажмите, чтобы увидеть все дела с этой причиной.', 'Every file is filed under one main reason people left. Click to see every file with that cause.'))}</p>
     </div>
     <div class="causes">${CAUSE_ORDER.map(c => { const list = SITES.filter(x => causeOf(x)===c); return `<a class="cause" href="#register" data-cause="${c}" data-reveal>
-      <b class="tabular">${list.length}</b>
+      <b class="tabular" data-count="${list.length}">0</b>
       <span class="cn">${esc(causeName(c))}</span>
       <span class="cd">${esc(causeDesc(c))}</span>
       <span class="ce">${list.map(x => esc(L(x).name)).join(', ')}</span>
@@ -1132,7 +1146,7 @@ function renderRegisterGrid(){
   const list = registerState.view === 'list';
   grid.innerHTML = results.length ? results.map(list ? rowHTML : cardHTML).join('') : `<p class="empty-note">${esc(t('noResults'))}</p>`;
   grid.className = results.length ? (list ? 'rows' : 'grid') : '';
-  mountRings(grid); primeImages(grid); observeReveals(grid);
+  mountRings(grid); primeImages(grid); enhance(grid); observeReveals(grid);
 }
 function viewRegister(){
   const continents = Object.keys(CONTINENT_LABEL);
@@ -1265,7 +1279,7 @@ function viewSite(id){
     <div>
       <section>
         <h2>${esc(t('timelineHead'))}</h2>
-        <ul class="timeline-list">${s.timeline.map(e => `<li><span class="yr">${e.y}</span><span>${esc(e.e)}</span></li>`).join('')}</ul>
+        <ul class="timeline-list">${s.timeline.map(e => `<li data-reveal><span class="yr">${e.y}</span><span>${esc(e.e)}</span></li>`).join('')}</ul>
       </section>
       <section>
         <h2>${esc(t('dataHead'))}</h2>
@@ -1503,7 +1517,7 @@ function renderRoute(){
   } else {
     app.innerHTML = ROUTES.atlas();
   }
-  mountRings(app); primeImages(app); observeReveals(app); wireMagnetic(app); initHomeGallery(app);
+  mountRings(app); primeImages(app); enhance(app); observeReveals(app); wireMagnetic(app); initHomeGallery(app);
   document.title = titleFor(hash);
   document.querySelectorAll('nav.tabs a').forEach(a => {
     a.classList.toggle('active', a.getAttribute('href') === '#'+(ROUTES[hash] ? hash : 'atlas') || (hash.startsWith('site-') && a.getAttribute('href')==='#register'));
@@ -1669,9 +1683,12 @@ function observeReveals(root){
     return;
   }
   const io = new IntersectionObserver(entries => {
+    let k = 0;
     entries.forEach(entry => {
       if(entry.isIntersecting){
-        entry.target.classList.add('in');
+        const el = entry.target, d = Math.min(k++, 8) * 70;
+        if(d){ el.style.transitionDelay = d + 'ms'; setTimeout(() => { el.style.transitionDelay = ''; }, d + 1300); }
+        el.classList.add('in');
         const counter = entry.target.querySelector('[data-count]');
         if(counter) animateCount(counter);
         io.unobserve(entry.target);
@@ -1681,6 +1698,41 @@ function observeReveals(root){
   els.forEach(el => io.observe(el));
 }
 
+
+/* ---------- motion: headline lines, image wipe, parallax ---------- */
+const motionOK = () => document.documentElement.dataset.motion !== 'off' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function splitLines(el){
+  if(el.dataset.split || el.children.length) return;
+  const text = el.textContent.trim(); if(!text) return;
+  el.dataset.split = '1';
+  el.innerHTML = text.split(/\s+/).map(w => `<span class="w">${esc(w)}</span>`).join(' ');
+  const lines = []; let top = null;
+  el.querySelectorAll('.w').forEach(w => { const t = w.offsetTop; if(top === null || Math.abs(t - top) > 3){ lines.push([]); top = t; } lines[lines.length - 1].push(w.textContent); });
+  el.innerHTML = lines.map((l, i) => `<span class="sl"><span style="transition-delay:${i * 90}ms">${esc(l.join(' '))}</span></span>`).join('');
+  el.classList.add('split');
+}
+let splitIO = null;
+function enhance(root){
+  if(!motionOK()) return;
+  const heads = root.querySelectorAll('.band-head h2, section > h1, .site-banner .overlay h1, .pn-n, .more-link');
+  if(!splitIO) splitIO = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); splitIO.unobserve(e.target); } }), { threshold:.2 });
+  heads.forEach(h => { splitLines(h); if(h.classList.contains('split')) splitIO.observe(h); });
+  parallax();
+}
+const PLX = '.card .thumb, .d-gallery .fr, .site-banner, .hg-item';
+let plxTick = false;
+function parallax(){
+  if(!motionOK()) return;
+  const vh = innerHeight;
+  document.querySelectorAll(PLX).forEach(el => {
+    const r = el.getBoundingClientRect();
+    if(r.bottom < -100 || r.top > vh + 100) return;
+    const p = (r.top + r.height / 2 - vh / 2) / vh;          /* -1..1 across the viewport */
+    el.style.setProperty('--py', (-p * r.height * 0.07).toFixed(1) + 'px');
+  });
+}
+addEventListener('scroll', () => { if(plxTick) return; plxTick = true; requestAnimationFrame(() => { plxTick = false; parallax(); }); }, { passive:true });
+addEventListener('resize', parallax);
 /* ---------- magnetic buttons ---------- */
 function wireMagnetic(root){
   root.querySelectorAll('[data-magnetic]').forEach(el => {
