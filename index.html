@@ -1017,8 +1017,6 @@ function cardHTML(site){
   const dormant = now - site.abandoned;
   return `<a class="card" href="#site-${site.id}" data-reveal="scale">
     <div class="thumb">${imgHTML(site, 0, '(max-width:767px) 100vw, 45vw')}
-      <div class="badge-ring"><canvas data-ring="${site.id}" aria-hidden="true"></canvas></div>
-      <div class="ring-label badge"><strong>${fmtInt(dormant)}</strong><span>${esc(t('yearsDormant'))}</span></div>
     </div>
     <div class="body">
       <div class="top-line"><span>${esc(s.country)}</span><span>${site.abandoned}</span></div>
@@ -1275,8 +1273,6 @@ function viewSite(id){
       <h1>${esc(s.name)}</h1>
       <p class="meta">${esc(s.country)} · ${esc(continentName(site.continent))}</p>
     </div>
-    <div class="badge-ring"><canvas data-ring="${site.id}" data-thick="1" aria-hidden="true"></canvas></div>
-    <div class="ring-label badge"><strong>${fmtInt(dormant)}</strong><span>${esc(t('yearsDormant'))}</span></div>
   </div>
   <div class="chips" style="margin:0 0 30px;">
     <span class="chip status">${esc(s.statusLabel)}</span>
