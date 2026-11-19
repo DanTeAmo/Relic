@@ -1,3 +1,4 @@
 {
-  "buildCommand": "node scripts/check.mjs"
+  "buildCommand": "node scripts/check.mjs && rm -rf public && mkdir public && cp -r index.html img public/",
+  "outputDirectory": "public"
 }
