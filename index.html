@@ -1,10 +1,19 @@
 <!doctype html>
+<html lang="ru">
 <meta charset="utf-8">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#f7f7f7">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Relict</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<title>Relict — архив заброшенных мест</title>
+<meta name="description" content="Relict — архив заброшенных городов, островов и строек: четырнадцать дел с историей, хронологией, координатами, фотографиями и причиной, по которой люди ушли.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Relict">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Relict — архив заброшенных мест">
+<meta property="og:description" content="Четырнадцать мест, где история закончилась внезапно: Припять, Хасима, Кольманскоп, Вароша и другие. Почему люди ушли и что осталось.">
+<meta property="og:image" content="https://relict-delta.vercel.app/img/pripyat/1-lg.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23000'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' text-anchor='middle' fill='%23f7f7f7'%3ER%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&display=swap">
 <style>
@@ -239,7 +248,8 @@
   .site-banner .ring-label.badge strong{ font-size:1.3rem; }
   .site-banner .ring-label.badge span{ font-size:.5rem; }
   .photo-credit{ position:absolute; top:12px; right:14px; z-index:3; color:#fff; font-size:12px; opacity:.85; text-shadow:0 1px 6px rgba(0,0,0,.55); max-width:60%; text-align:right; transition: opacity .25s; }
-  .photo-credit:hover{ opacity:1; text-decoration:underline; }
+  .photo-credit:hover{ opacity:1; }
+  .photo-credit a:hover, .d-gallery figcaption a:hover{ text-decoration:underline; }
   @media (max-width: 760px){ .site-banner{ height: 125vw; max-height: 78vh; } }
   .chips{ display:flex; gap:4px; flex-wrap:wrap; }
   .stat-grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(130px,1fr)); gap: 18px var(--gap); padding: 14px 0 22px; border-top: 1px solid var(--label); margin-bottom: clamp(36px,6vw,80px); }
@@ -280,7 +290,7 @@
   @media (hover:hover){ .pn-row:hover .pn{ opacity:.35; } .pn-row .pn:hover{ opacity:1; } }
 
   /* ---------- register ---------- */
-  .filters{ display:grid; grid-template-columns: 16.667% 1fr 1fr 1fr; gap: var(--gap); align-items:start; margin-bottom: clamp(32px,5vw,72px); font-size: var(--size-body); }
+  .filters{ display:grid; grid-template-columns: 16.667% repeat(4, 1fr); gap: var(--gap); align-items:start; margin-bottom: clamp(32px,5vw,72px); font-size: var(--size-body); }
   .search-field{ display:flex; align-items:center; gap: 8px; background: var(--tag); border-radius: 3px; padding: 6px 8px; margin-bottom: 14px; }
   .search-field svg{ width:14px; height:14px; color: var(--label-2); flex-shrink:0; }
   .search-field input{ width:100%; font-size: var(--size-body); }
@@ -296,6 +306,7 @@
   .sort-select select:hover{ color: var(--label); }
   .grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(clamp(220px,24vw,340px),1fr)); gap: calc(var(--gap)*2) var(--gap); }
   .empty-note{ padding: 48px 0; color: var(--label-2); }
+  @media (max-width: 1100px){ .filters{ grid-template-columns: repeat(4, 1fr); row-gap: 22px; } .filters > :first-child{ grid-column: 1 / -1; display:flex; gap: var(--gap); align-items:flex-start; flex-wrap:wrap; } .filters > :first-child .search-field{ flex: 1 1 240px; max-width: 360px; margin-bottom:0; } .filters > :first-child .sort-select{ margin-top:0; } }
   @media (max-width: 760px){ .filters{ grid-template-columns: 1fr 1fr; row-gap: 22px; } .filters > :first-child{ grid-column: 1 / -1; } }
 
   /* ---------- chart ---------- */
@@ -411,6 +422,17 @@
   .map-pop .mpmeta{ font-size:13px; color:var(--label-2); margin:2px 0 8px; }
   .map-pop a{ font-size:14px; text-decoration: underline; text-underline-offset: 2px; }
   .map-hint{ font-size:13px; color:var(--label-2); margin-top:10px; }
+  /* ---------- causes of abandonment ---------- */
+  .causes{ display:grid; grid-template-columns: repeat(5, 1fr); gap: var(--gap); border-top: 1px solid var(--label); }
+  .cause{ display:flex; flex-direction:column; gap:8px; padding-top:14px; transition: opacity .3s ease; }
+  .cause b{ font-weight:400; font-size: var(--size-statement); letter-spacing:-0.04em; line-height:.9; }
+  .cause .cn{ font-size: var(--size-body); }
+  .cause .cd{ font-size: var(--size-small); color: var(--label-2); line-height:1.15; }
+  .cause .ce{ font-size: 13px; color: var(--label-2); line-height:1.2; margin-top:auto; padding-top:6px; }
+  @media (hover:hover){ .causes:hover .cause{ opacity:.35; } .causes .cause:hover{ opacity:1; } }
+  @media (max-width: 900px){ .causes{ grid-template-columns: repeat(2, 1fr); row-gap: 28px; } }
+  @media (max-width: 480px){ .causes{ grid-template-columns: 1fr; } }
+  a.chip:hover{ background: var(--sep-strong); }
 </style>
 
 <a class="skip" href="#app" id="skipLink">Skip to content</a>
@@ -429,7 +451,7 @@
       <a href="#atlas" class="brand" aria-label="Relict">RELICT</a>
       <nav class="tabs" id="tabs"></nav>
       <div class="chrome-controls">
-        <button class="ctl" id="copyMail" type="button"></button>
+        <a class="ctl" id="copyMail" data-propose target="_blank" rel="noopener"></a>
         <div class="seg" id="langSwitch" role="group" aria-label="Language">
           <button data-lang="ru">RU</button>
           <button data-lang="en">EN</button>
@@ -447,12 +469,12 @@
     </div>
   </header>
 
-  <main class="wrap" id="app"></main>
+  <main class="wrap" id="app"><noscript><p style="padding-top:40px">Для работы архива нужен JavaScript. JavaScript is required to view this archive.</p></noscript></main>
 
   <footer class="colophon wrap">
     <div class="foot-contact">
       <a href="#dispatch"><span id="footCta"></span></a>
-      <a href="mailto:dossier@relict.archive"><span class="muted">dossier@relict.archive</span></a>
+      <a data-propose target="_blank" rel="noopener"><span class="muted" id="footProposeSub"></span></a>
     </div>
     <span class="foot-mark" id="footMark" aria-hidden="true"></span>
     <div class="foot-grid">
@@ -499,7 +521,7 @@ const STR = {
     dispatchP1: 'Relict начинался как попытка каталогизировать места, которые история отпустила раньше, чем географию. Не трагедии напоказ и не декорации для фотографий — а дела: с датами, координатами и тем, что конкретно пошло не так.',
     dispatchP2: 'Каждая запись проходит один и тот же протокол: происхождение места, момент ухода, пик и его цена, и то, что стоит на месте сейчас — настолько точно, насколько позволяет последний обзор. Там, где источники расходятся, архив говорит об этом прямо, а не выбирает версию покрасивее.',
     dispatchP3: 'Архив не ведёт прямых трансляций и не публикует текущих новостей о статусе мест — только то, что было подтверждено на момент обзора. Это сознательное ограничение, а не недосмотр.',
-    dispatchHow: 'Предложить дело можно по адресу ниже — с координатами, источником и кратким описанием того, что там случилось.',
+    dispatchHow: 'Предложить дело можно через форму на GitHub — с координатами, источником и кратким описанием того, что там случилось. Заявки открыты, их видят все.',
     copyAddr: 'Скопировать адрес', copied: 'Скопировано',
     motionOn: 'Включить анимации', motionOff: 'Отключить анимации',
     exploreHead: 'Исследовать архив',
@@ -540,7 +562,7 @@ const STR = {
     dispatchP1: 'Relict began as an attempt to catalogue places that history let go of before geography did. Not disaster tourism, not photo-ready ruin — case files: dates, coordinates, and what specifically went wrong.',
     dispatchP2: 'Every entry follows the same protocol: the place’s origin, the moment of departure, its peak and the cost of that peak, and what stands there now, as precisely as the last survey allows. Where sources disagree, the archive says so rather than picking the tidier version.',
     dispatchP3: 'The archive does not run a live feed and does not publish current status updates — only what was confirmed as of survey date. That is a deliberate limit, not an oversight.',
-    dispatchHow: 'Propose a case file at the address below, with coordinates, a source, and a short account of what happened there.',
+    dispatchHow: 'Propose a case file through the GitHub form, with coordinates, a source, and a short account of what happened there. Submissions are public.',
     copyAddr: 'Copy address', copied: 'Copied',
     motionOn: 'Enable animations', motionOff: 'Reduce animations',
     exploreHead: 'Explore the archive',
@@ -572,6 +594,37 @@ const CATEGORY_LABEL = {
   island: { en:'Island', ru:'Остров' },
   leisure: { en:'Leisure', ru:'Зона отдыха' }
 };
+
+/* ---------- cause of abandonment ----------
+   Classified from each file's own history text above (no new facts added). */
+const CAUSE_OF = {
+  pripyat:'disaster', centralia:'disaster',
+  hashima:'economy', kolmanskop:'economy', bodie:'economy', humberstone:'economy', fordlandia:'economy', spreepark:'economy',
+  craco:'nature', epecuen:'nature',
+  kayakoy:'conflict', varosha:'conflict',
+  wittenoom:'health', northbrother:'health'
+};
+const CAUSE_LABEL = {
+  economy:  { ru:'Экономика', en:'Economics',
+              dru:'Ресурс иссяк или перестал быть нужен: уголь, алмазы, золото, селитра, каучук, деньги владельца.',
+              den:'The resource ran out or stopped mattering: coal, diamonds, gold, nitrate, rubber, an owner’s money.' },
+  disaster: { ru:'Техногенная катастрофа', en:'Man-made disaster',
+              dru:'Авария, устроенная людьми: взорвавшийся реактор, подземный пожар, который не потушить.',
+              den:'An accident people caused: an exploded reactor, an underground fire nobody could put out.' },
+  nature:   { ru:'Стихия', en:'Natural forces',
+              dru:'Земля и вода: оползень, который съедает холм, наводнение, которое держится четверть века.',
+              den:'Ground and water: a landslide eating its hill, a flood that stayed for a quarter century.' },
+  conflict: { ru:'Война и политика', en:'War & politics',
+              dru:'Решение государств: договор об обмене населением, вторжение, после которого город огородили.',
+              den:'Decisions by states: a population-exchange treaty, an invasion that left a city fenced off.' },
+  health:   { ru:'Здоровье', en:'Health',
+              dru:'Место стало опасным или ненужным для здоровья: асбест в воздухе, карантин, который больше не нужен.',
+              den:'The place turned dangerous or medically obsolete: asbestos in the air, a quarantine no longer needed.' }
+};
+const CAUSE_ORDER = ['economy','disaster','nature','conflict','health'];
+function causeOf(site){ return CAUSE_OF[site.id] || 'economy'; }
+function causeName(key){ return CAUSE_LABEL[key][LANG]; }
+function causeDesc(key){ return CAUSE_LABEL[key][LANG==='ru' ? 'dru' : 'den']; }
 
 /* ---------- language state ---------- */
 function getLang(){
@@ -843,6 +896,23 @@ const GLOSSARY = [
 /* ---------- photographs: Wikimedia Commons, free licences (credit shown with each image) ---------- */
 const PHOTOS = {"pripyat": [{"by": "Paweł 'pbm' Szubert (talk)", "lic": "CC BY-SA 3.0", "url": "https://commons.wikimedia.org/wiki/File:Pripyat_-_amusement_park_01.jpg", "title": "Pripyat - amusement park 01.jpg", "w": 4310, "h": 2868}, {"by": "Jorge Franganillo from Barcelona, Spain", "lic": "CC BY 2.0", "url": "https://commons.wikimedia.org/wiki/File:Pripyat_amusement_park_(37746771195).jpg", "title": "Pripyat amusement park (37746771195).jpg", "w": 4512, "h": 3008}, {"by": "Paweł 'pbm' Szubert (talk)", "lic": "CC BY-SA 3.0", "url": "https://commons.wikimedia.org/wiki/File:Pripyat_-_amusement_park_02.jpg", "title": "Pripyat - amusement park 02.jpg", "w": 4310, "h": 2868}], "hashima": [{"by": "Jakub Hałun", "lic": "CC BY 4.0", "url": "https://commons.wikimedia.org/wiki/File:Hashima,_Nagasaki,_Japan,_20240814_1421_3380.jpg", "title": "Hashima, Nagasaki, Japan, 20240814 1421 3380.jpg", "w": 5891, "h": 2772}, {"by": "Jakub Hałun", "lic": "CC BY 4.0", "url": "https://commons.wikimedia.org/wiki/File:Hashima,_Nagasaki,_Japan,_20240814_1428_3432.jpg", "title": "Hashima, Nagasaki, Japan, 20240814 1428 3432.jpg", "w": 5005, "h": 3340}, {"by": "Jakub Hałun", "lic": "CC BY 4.0", "url": "https://commons.wikimedia.org/wiki/File:Hashima,_Nagasaki,_Japan,_20240814_1421_3378.jpg", "title": "Hashima, Nagasaki, Japan, 20240814 1421 3378.jpg", "w": 5160, "h": 2808}], "kolmanskop": [{"by": "SkyPixels", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Kolmanskop_Ghost_Town.jpg", "title": "Kolmanskop Ghost Town.jpg", "w": 4000, "h": 2250}, {"by": "Lubor Ferenc", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Kolmanskop_Namibia.jpg", "title": "Kolmanskop Namibia.jpg", "w": 3008, "h": 2008}, {"by": "SkyPixels", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Kolmanskop_Ghost_Town_Buildings.jpg", "title": "Kolmanskop Ghost Town Buildings.jpg", "w": 4000, "h": 2250}], "bodie": [{"by": "Mike McBey", "lic": "CC BY 2.0", "url": "https://commons.wikimedia.org/wiki/File:Bodie_Methodist_Church_(Abandoned)_-_Flickr_-_M_McBey.jpg", "title": "Bodie Methodist Church (Abandoned) - Flickr - M McBey.jpg", "w": 5302, "h": 2852}, {"by": "Photographersnature (talk · contribs), [1]", "lic": "CC BY-SA 3.0", "url": "https://commons.wikimedia.org/wiki/File:Bodie_Ghost_Town_Storm.jpg", "title": "Bodie Ghost Town Storm.jpg", "w": 2592, "h": 1728}, {"by": "Supercarwaar", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Methodist_Church,_Bodie_interior.jpg", "title": "Methodist Church, Bodie interior.jpg", "w": 5905, "h": 3926}], "craco": [{"by": "Maurizio Moro5153", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Craco_il_paese_fantasma.jpg", "title": "Craco il paese fantasma.jpg", "w": 6720, "h": 4480}, {"by": "Maurizio Moro5153", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Craco_drone.jpg", "title": "Craco drone.jpg", "w": 5464, "h": 3640}, {"by": "Dage - Looking For Europe", "lic": "CC BY 2.0", "url": "https://commons.wikimedia.org/wiki/File:Craco0020.jpg", "title": "Craco0020.jpg", "w": 5184, "h": 3888}], "humberstone": [{"by": "Diego Delso", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Oficinas_salitreras_de_Humberstone_y_Santa_Laura,_Chile,_2016-02-11,_DD_25.jpg", "title": "Oficinas salitreras de Humberstone y Santa Laura, Chile, 2016-02-11, DD 25.jpg", "w": 8588, "h": 4636}, {"by": "Diego Delso", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Oficinas_salitreras_de_Humberstone_y_Santa_Laura,_Chile,_2016-02-11,_DD_63-65_HDR.jpg", "title": "Oficinas salitreras de Humberstone y Santa Laura, Chile, 2016-02-11, DD 63-65 HDR.jpg", "w": 7485, "h": 3871}, {"by": "Diego Delso", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Oficinas_salitreras_de_Humberstone_y_Santa_Laura,_Chile,_2016-02-11,_DD_49.jpg", "title": "Oficinas salitreras de Humberstone y Santa Laura, Chile, 2016-02-11, DD 49.jpg", "w": 8688, "h": 5792}], "kayakoy": [{"by": "Nikodem Nijaki", "lic": "CC BY-SA 3.0", "url": "https://commons.wikimedia.org/wiki/File:Ghost_town_Kayakoy_IMGP8857.jpg", "title": "Ghost town Kayakoy IMGP8857.jpg", "w": 4672, "h": 2851}, {"by": "Dosseman", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Kayak%C3%B6y_7378.jpg", "title": "Kayaköy 7378.jpg", "w": 4928, "h": 3280}, {"by": "Dosseman", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Kayak%C3%B6y_7420.jpg", "title": "Kayaköy 7420.jpg", "w": 4928, "h": 3280}], "centralia": [{"by": "Codyrt", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Graffiti_Highway_-_Centralia,_Pennsylvania_(2019).jpg", "title": "Graffiti Highway - Centralia, Pennsylvania (2019).jpg", "w": 4056, "h": 3040}, {"by": "Z22\nderivative work: Georgfotoart", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Standalone_row_house_in_Centralia,_Pennsylvania_b.jpg", "title": "Standalone row house in Centralia, Pennsylvania b.jpg", "w": 3591, "h": 2693}, {"by": "Bob", "lic": "CC BY 2.0", "url": "https://commons.wikimedia.org/wiki/File:American_Graffiti_Highway_outside_Centralia,_Pennsylvania.jpg", "title": "American Graffiti Highway outside Centralia, Pennsylvania.jpg", "w": 2000, "h": 1333}], "varosha": [{"by": "ToprakM", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Abandoned_building_in_Varosha_3_-_Magusa_Photowalk.jpg", "title": "Abandoned building in Varosha 3 - Magusa Photowalk.jpg", "w": 3264, "h": 1840}, {"by": "Çınar Civan", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:A_Workplace_in_Varosha,_Cyprus.jpg", "title": "A Workplace in Varosha, Cyprus.jpg", "w": 6000, "h": 4000}, {"by": "Seksen iki yüz kırk beş", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Varosha_2020_2.jpg", "title": "Varosha 2020 2.jpg", "w": 2048, "h": 1536}], "fordlandia": [{"by": "Amit Evron - User: (WT-shared) Amitevron at  wts wikivoyage", "lic": "CC BY-SA 3.0", "url": "https://commons.wikimedia.org/wiki/File:Fordlandia.JPG", "title": "Fordlandia.JPG", "w": 2560, "h": 1920}, {"by": "Méduse", "lic": "CC BY-SA 3.0", "url": "https://commons.wikimedia.org/wiki/File:Fordlandia_2.JPG", "title": "Fordlandia 2.JPG", "w": 2048, "h": 1536}, {"by": "Méduse", "lic": "CC BY-SA 3.0", "url": "https://commons.wikimedia.org/wiki/File:Fordlandia_-_Escritorio_local_et_all%C3%A9e_de_manguiers.JPG", "title": "Fordlandia - Escritorio local et allée de manguiers.JPG", "w": 2048, "h": 1536}], "spreepark": [{"by": "Nadia Nadienka", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Spreepark_wheel.jpg", "title": "Spreepark wheel.jpg", "w": 3337, "h": 2502}, {"by": "wazabi", "lic": "CC BY 3.0", "url": "https://commons.wikimedia.org/wiki/File:Pl%C3%A4nterwald,_Berlin,_Germany_-_panoramio_-_wazabi_(7).jpg", "title": "Plänterwald, Berlin, Germany - panoramio - wazabi (7).jpg", "w": 3072, "h": 2304}, {"by": "TonkBerlin", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Alter_Achterbahnstunnel_im_brachen_Spreepark_Berlin.jpg", "title": "Alter Achterbahnstunnel im brachen Spreepark Berlin.jpg", "w": 4032, "h": 3024}], "epecuen": [{"by": "Santiago matamoro", "lic": "CC BY 3.0", "url": "https://commons.wikimedia.org/wiki/File:Villa_Epecu%C3%A9n.JPG", "title": "Villa Epecuén.JPG", "w": 2048, "h": 1536}, {"by": "Gafotos", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Ruinas_de_Epecuen_42.jpg", "title": "Ruinas de Epecuen 42.jpg", "w": 4928, "h": 3264}, {"by": "Gafotos", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Ruinas_de_Epecuen_07.jpg", "title": "Ruinas de Epecuen 07.jpg", "w": 4647, "h": 3078}], "wittenoom": [{"by": "User:Five Years", "lic": "CC BY-SA 3.0", "url": "https://commons.wikimedia.org/wiki/File:Wittenoom_WA_-_Doc_Holidays_Cafe_1.JPG", "title": "Wittenoom WA - Doc Holidays Cafe 1.JPG", "w": 3456, "h": 2592}, {"by": "wilford peloquin", "lic": "CC BY 2.0", "url": "https://commons.wikimedia.org/wiki/File:69-07_Centralian_Tours_328_Wittenoom_Gorge,_Australia_1969_(51240464100).jpg", "title": "69-07 Centralian Tours 328 Wittenoom Gorge, Australia 1969 (51240464100).jpg", "w": 3042, "h": 2209}, {"by": "Five Years", "lic": "CC BY-SA 3.0", "url": "https://commons.wikimedia.org/wiki/File:Wittenoom_-_Doc_Holidays.JPG", "title": "Wittenoom - Doc Holidays.JPG", "w": 3456, "h": 2592}], "northbrother": [{"by": "Julie McCoy (Kayak Cowgirl)", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:North_Brother_Island_Old_Plant.jpg", "title": "North Brother Island Old Plant.jpg", "w": 1600, "h": 1200}, {"by": "Julie McCoy (Kayak Cowgirl)", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:North_Brother_Island_Caretaker%27s_House.jpg", "title": "North Brother Island Caretaker's House.jpg", "w": 1600, "h": 1200}, {"by": "Julie McCoy (Kayak Cowgirl)", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:North_Brother_Island_Ferry_Dock.jpg", "title": "North Brother Island Ferry Dock.jpg", "w": 1600, "h": 1027}]};
 function tr(ru, en){ return LANG==='ru' ? ru : en; }
+function licURL(lic){
+  const m = /CC (BY(?:-SA)?) (\d\.\d)/i.exec(lic || '');
+  return m ? `https://creativecommons.org/licenses/${m[1].toLowerCase()}/${m[2]}/` : '';
+}
+function creditHTML(p){
+  if(!p) return '';
+  const deed = licURL(p.lic);
+  const lic = deed ? `<a href="${deed}" target="_blank" rel="noopener license">${esc(p.lic)}</a>` : esc(p.lic);
+  return `${tr('Фото','Photo')}: <a href="${p.url}" target="_blank" rel="noopener">${esc(p.by)}</a>, ${lic} · ${tr('кадрировано, цвет изменён','cropped, colour-adjusted')}`;
+}
+const PROPOSE_REPO = 'https://github.com/DanTeAmo/Relic/issues/new';
+function proposeURL(){
+  const title = tr('Новое дело: ', 'New case file: ');
+  const body = tr('Название места:\nСтрана:\nКоординаты:\nГод основания и год ухода:\nПочему люди ушли:\nИсточники (ссылки):\n',
+                  'Place name:\nCountry:\nCoordinates:\nYear founded and year abandoned:\nWhy people left:\nSources (links):\n');
+  return `${PROPOSE_REPO}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+}
 function photoSrc(id, n, sz){ return `img/${id}/${n+1}-${sz}.jpg`; }
 function imgHTML(site, n, sizes, opts){
   opts = opts || {};
@@ -918,8 +988,8 @@ function cardHTML(site){
       <h3>${esc(s.name)}</h3>
       <p class="hook">${esc(s.hook)}</p>
       <div class="chips">
+        <span class="chip">${esc(causeName(causeOf(site)))}</span>
         <span class="chip">${esc(continentName(site.continent))}</span>
-        <span class="chip">${esc(categoryName(site.category))}</span>
       </div>
     </div>
   </a>`;
@@ -930,7 +1000,7 @@ function rowHTML(site){
     <span class="r-n">${String(siteIndex(site.id)).padStart(2,'0')}</span>
     <span class="r-name">${esc(s.name)}</span>
     <span class="r-c">${esc(s.country)}</span>
-    <span class="r-t">${esc(categoryName(site.category))}</span>
+    <span class="r-t">${esc(causeName(causeOf(site)))}</span>
     <span class="r-y">${site.abandoned}</span>
     <span class="r-d">${fmtInt(dormant)} ${esc(t('yearsDormant'))}</span>
   </a>`;
@@ -973,6 +1043,18 @@ function viewAtlas(){
     </div>
     <div class="featured-grid">${picks.map(cardHTML).join('')}</div>
     <a class="more-link" href="#register" data-reveal>${esc(t('seeAll'))}</a>
+  </section>
+  <section class="band">
+    <div class="band-head" data-reveal>
+      <h2>${esc(tr('Почему места пустеют', 'Why places empty'))}</h2>
+      <p class="note">${esc(tr('Каждое дело в архиве отнесено к одной главной причине ухода. Нажмите, чтобы увидеть все дела с этой причиной.', 'Every file is filed under one main reason people left. Click to see every file with that cause.'))}</p>
+    </div>
+    <div class="causes">${CAUSE_ORDER.map(c => { const list = SITES.filter(x => causeOf(x)===c); return `<a class="cause" href="#register" data-cause="${c}" data-reveal>
+      <b class="tabular">${list.length}</b>
+      <span class="cn">${esc(causeName(c))}</span>
+      <span class="cd">${esc(causeDesc(c))}</span>
+      <span class="ce">${list.map(x => esc(L(x).name)).join(', ')}</span>
+    </a>`; }).join('')}</div>
   </section>
   <section class="band">
     <div class="band-head" data-reveal>
@@ -1023,11 +1105,12 @@ function initHomeGallery(root){
   show(0); arm();
 }
 
-const registerState = { q:'', continent:'all', category:'all', sort:'name', view:'grid' };
+const registerState = { q:'', continent:'all', category:'all', cause:'all', sort:'name', view:'grid' };
 function matchesFilter(site){
   const s = L(site);
   if(registerState.continent!=='all' && site.continent!==registerState.continent) return false;
   if(registerState.category!=='all' && site.category!==registerState.category) return false;
+  if(registerState.cause!=='all' && causeOf(site)!==registerState.cause) return false;
   if(registerState.q){
     const hay = (s.name+' '+s.country+' '+s.hook).toLowerCase();
     if(!hay.includes(registerState.q.toLowerCase())) return false;
@@ -1083,6 +1166,11 @@ function viewRegister(){
         <button class="filter-chip${registerState.category==='all'?' active':''}" data-val="all">${esc(t('all'))}</button>
         ${categories.map(c => `<button class="filter-chip${registerState.category===c?' active':''}" data-val="${c}">${esc(categoryName(c))}</button>`).join('')}
       </div>
+      <div class="fcol" id="regCause" role="group" aria-label="${esc(tr('Причина','Cause'))}">
+        <span class="flabel">${esc(tr('Причина','Cause'))}</span>
+        <button class="filter-chip${registerState.cause==='all'?' active':''}" data-val="all">${esc(t('all'))}</button>
+        ${CAUSE_ORDER.map(c => `<button class="filter-chip${registerState.cause===c?' active':''}" data-val="${c}">${esc(causeName(c))}</button>`).join('')}
+      </div>
       <div class="fcol" id="regView" role="group" aria-label="${esc(tr('Вид','View'))}">
         <span class="flabel">${esc(tr('Вид','View'))}</span>
         <button class="filter-chip${registerState.view==='grid'?' active':''}" data-val="grid">${esc(tr('Сетка','Grid'))}</button>
@@ -1105,6 +1193,11 @@ function wireRegisterEvents(){
     document.querySelectorAll('#regCategory .filter-chip').forEach(b => b.classList.toggle('active', b===btn));
     renderRegisterGrid();
   }));
+  document.querySelectorAll('#regCause .filter-chip').forEach(btn => btn.addEventListener('click', () => {
+    registerState.cause = btn.dataset.val;
+    document.querySelectorAll('#regCause .filter-chip').forEach(b => b.classList.toggle('active', b===btn));
+    renderRegisterGrid();
+  }));
   document.querySelectorAll('#regView .filter-chip').forEach(btn => btn.addEventListener('click', () => {
     registerState.view = btn.dataset.val;
     document.querySelectorAll('#regView .filter-chip').forEach(b => b.classList.toggle('active', b===btn));
@@ -1123,7 +1216,7 @@ function viewSite(id){
   const dormant = now - site.abandoned;
   const active = site.abandoned - site.founded;
   const ph = PHOTOS[site.id] || [];
-  const credit = n => ph[n] ? `<a href="${ph[n].url}" target="_blank" rel="noopener">${tr('Фото','Photo')}: ${esc(ph[n].by)}, ${esc(ph[n].lic)}</a>` : '';
+  const credit = n => creditHTML(ph[n]);
   const gallery = ph.length > 2 ? `<div class="d-gallery">
     <figure class="g1" data-reveal><div class="fr">${imgHTML(site, 1, '(max-width:760px) 100vw, 62vw')}</div><figcaption>${credit(1)}</figcaption></figure>
     <figure class="g2" data-reveal><div class="fr">${imgHTML(site, 2, '(max-width:760px) 100vw, 32vw')}</div><figcaption>${credit(2)}</figcaption></figure>
@@ -1136,7 +1229,7 @@ function viewSite(id){
   <a class="back-link" href="#register"><span aria-hidden="true">←</span> ${esc(t('backToRegister'))}</a>
   <div class="site-banner">
     ${imgHTML(site, 0, '100vw', {eager:true})}
-    ${(PHOTOS[site.id]||[])[0] ? `<a class="photo-credit" href="${PHOTOS[site.id][0].url}" target="_blank" rel="noopener">${tr('Фото','Photo')}: ${esc(PHOTOS[site.id][0].by)}, ${esc(PHOTOS[site.id][0].lic)}</a>` : ''}
+    ${(PHOTOS[site.id]||[])[0] ? `<div class="photo-credit">${creditHTML(PHOTOS[site.id][0])}</div>` : ''}
     <div class="fade"></div>
     <div class="overlay">
       <div class="eyebrow">${esc(t('heroEyebrow'))}${String(siteIndex(site.id)).padStart(2,'0')}</div>
@@ -1148,6 +1241,7 @@ function viewSite(id){
   </div>
   <div class="chips" style="margin:0 0 30px;">
     <span class="chip status">${esc(s.statusLabel)}</span>
+    <a class="chip" href="#register" data-cause="${causeOf(site)}">${esc(tr('Причина','Cause'))}: ${esc(causeName(causeOf(site)))}</a>
     <span class="chip">${esc(categoryName(site.category))}</span>
   </div>
   <div class="stat-grid">
@@ -1179,6 +1273,7 @@ function viewSite(id){
           <div><span>${esc(t('coordLbl'))}</span><span class="mono">${site.lat.toFixed(4)}, ${site.lng.toFixed(4)}</span></div>
           <div><span>${esc(t('continentLbl'))}</span><span>${esc(continentName(site.continent))}</span></div>
           <div><span>${esc(t('categoryLbl'))}</span><span>${esc(categoryName(site.category))}</span></div>
+          <div><span>${esc(tr('Причина ухода','Why people left'))}</span><span>${esc(causeName(causeOf(site)))}</span></div>
           <div><span>${esc(t('yearsActive'))}</span><span>${active}</span></div>
         </div>
         <p class="disclaimer">${esc(t('statusDisclaimer'))}</p>
@@ -1380,8 +1475,8 @@ function viewDispatch(){
       <p>${esc(t('dispatchP3'))}</p>
       <p>${esc(t('dispatchHow'))}</p>
       <div class="address-block">
-        <span class="addr mono">dossier@relict.archive</span>
-        <button class="btn secondary" id="copyAddrBtn">${esc(t('copyAddr'))}</button>
+        <span class="addr">${esc(tr('Предложить дело', 'Propose a case file'))}</span>
+        <a class="btn primary" data-propose href="${proposeURL()}" target="_blank" rel="noopener">${esc(tr('Открыть форму на GitHub →', 'Open the form on GitHub →'))}</a>
       </div>
     </div>
   </section>`;
@@ -1405,15 +1500,6 @@ function renderRoute(){
     app.innerHTML = ROUTES[hash]();
     if(hash === 'register') wireRegisterEvents();
     if(hash === 'chart') initMap();
-    if(hash === 'dispatch'){
-      const btn = document.getElementById('copyAddrBtn');
-      if(btn) btn.addEventListener('click', () => {
-        navigator.clipboard?.writeText('dossier@relict.archive').then(() => {
-          const orig = btn.textContent; btn.textContent = t('copied');
-          setTimeout(() => { btn.textContent = orig; }, 1800);
-        }).catch(()=>{});
-      });
-    }
   } else {
     app.innerHTML = ROUTES.atlas();
   }
@@ -1488,11 +1574,12 @@ function renderChrome(){
   const motionOff = document.documentElement.getAttribute('data-motion') === 'off';
   const motionLabel = motionOff ? t('motionOn') : t('motionOff');
   motionBtn.title = motionLabel; motionBtn.setAttribute('aria-label', motionLabel);
-  const cm = document.getElementById('copyMail');
-  cm.textContent = tr('Связаться', 'Contact'); cm.dataset.label = cm.textContent; cm.style.minWidth = '';
+  document.getElementById('copyMail').textContent = tr('Предложить дело', 'Propose a file');
+  document.querySelectorAll('[data-propose]').forEach(a => { a.href = proposeURL(); });
+  document.getElementById('footProposeSub').textContent = tr('через форму на GitHub →', 'via the GitHub form →');
   document.getElementById('skipLink').textContent = tr('К содержимому', 'Skip to content');
   document.getElementById('footText').textContent = t('footer');
-  document.getElementById('footCta').textContent = LANG==='ru' ? 'Связаться с архивом' : 'Get in touch';
+  document.getElementById('footCta').textContent = tr('Предложить дело', 'Propose a case file');
   document.getElementById('footYear').textContent = '\u00a9' + new Date().getFullYear();
   const fm = document.getElementById('footMark');
   if(!fm.firstChild){
@@ -1767,16 +1854,12 @@ if(document.documentElement.getAttribute('data-motion')==='off'){
   const mb = document.getElementById('motionToggle'); mb.classList.add('on'); mb.setAttribute('aria-pressed','true');
 }
 document.getElementById('app').addEventListener('click', e => {
+  const c = e.target.closest && e.target.closest('[data-cause]');
+  if(c){ registerState.cause = c.dataset.cause; registerState.continent = 'all'; registerState.category = 'all'; registerState.q = ''; }
   if(e.target && e.target.id === 'heroRandom'){
     const pick = SITES[Math.floor(Math.random()*SITES.length)];
     location.hash = '#site-' + pick.id;
   }
-});
-document.getElementById('copyMail').addEventListener('click', function(){
-  const btn = this, label = btn.dataset.label;
-  btn.style.minWidth = btn.offsetWidth + 'px';
-  const done = () => { btn.textContent = tr('Скопировано', 'Copied'); setTimeout(() => { btn.textContent = label; }, 1700); };
-  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText('dossier@relict.archive').then(done).catch(done); else done();
 });
 window.addEventListener('scroll', () => document.body.classList.toggle('scrolled', window.scrollY > 24), { passive:true });
 tickClock();
